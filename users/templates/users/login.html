@@ -1,0 +1,50 @@
+{% extends 'users/base/base.html' %}
+{% block title %} Login Page {% endblock %}
+
+{% block login_content %}
+    <main class="main" id="top">
+        <div class="container-fluid">
+            <div class="row min-vh-100 flex-center g-0">
+                <div class="col-md-6">
+                    <h3>Login</h3>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="alert alert-warning">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if form.errors %}
+                        <ul class="alert alert-danger">
+                            {% for field, errors in form.errors.items %}
+                                <li>{{ field }}: {{ errors|striptags }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" name="email" type="text" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input class="form-control" name="password" type="password" required/>
+                        </div>
+                        <button class="btn btn-primary w-100" type="submit">Log in</button>
+                    </form>
+
+                    <div class="row g-2 mt-2">
+                        <div class="col-sm-6"><a class="btn btn-outline-google-plus btn-sm d-block w-100" href="{% url "social:begin" "google-oauth2" %}"><span
+                                class="fab fa-google-plus-g me-2" data-fa-transform="grow-8"></span>Google</a></div>
+                        <div class="col-sm-6"><a class="btn btn-outline-google-plus btn-sm d-block w-100" href="{% url 'social:begin' 'github' %}"><span
+                                class="fab fa-github-square me-2" data-fa-transform="grow-8"></span>GitHub</a>
+                        </div>
+                    </div>
+                    <p class="mt-3">Hisobingiz yo‘qmi? <a href="{% url 'users:register_page' %}">Ro‘yxatdan o‘tish</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

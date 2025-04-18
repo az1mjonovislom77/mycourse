@@ -1,0 +1,46 @@
+{% extends 'users/base/base.html' %}
+{% block title %} Register Page {% endblock %}
+
+{% block register_content %}
+    <main class="main" id="top">
+        <div class="container-fluid">
+            <div class="row min-vh-100 flex-center g-0">
+                <div class="col-md-6">
+                    <h3>Ro‘yxatdan o‘tish</h3>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="alert alert-warning">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if form.errors %}
+                        <ul class="alert alert-danger">
+                            {% for field, errors in form.errors.items %}
+                                <li>{{ field }}: {{ errors|striptags }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" name="email" type="text" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Parol</label>
+                            <input class="form-control" name="password1" type="password" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Parolni tasdiqlang</label>
+                            <input class="form-control" name="password2" type="password" required/>
+                        </div>
+                        <button class="btn btn-primary w-100" type="submit">Ro‘yxatdan o‘tish</button>
+                    </form>
+
+                    <p class="mt-3">Allaqachon hisobingiz bormi? <a href="{% url 'users:login_page' %}">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

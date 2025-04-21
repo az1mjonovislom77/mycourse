@@ -101,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
@@ -123,6 +123,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'course/media')
 AUTH_USER_MODEL = 'users.CustomUser'
 
 AUTHENTICATION_BACKENDS = (
+    'users.backends.CustomGithubOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
@@ -143,7 +144,6 @@ SOCIAL_AUTH_GITHUB_REDIRECT_URI = "http://127.0.0.1:8000/complete/github/"
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
 
-LOGIN_URL = '/course/'
 LOGIN_REDIRECT_URL = '/course/'
 LOGOUT_REDIRECT_URL = '/'
 

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import IndexView, CategoryListView, CategoryDetailView, CourseDetailView, BuyCourseView, CourseVideoView
+from .views import IndexView, CategoryListView, CategoryDetailView, CourseDetailView, BuyCourseView, CourseVideoView, CourseListView, AboutView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -12,4 +12,6 @@ urlpatterns = [
     path('course_detail/<slug:slug>/', CourseDetailView.as_view(), name='course_detail'),
     path('buy/<slug:slug>/', BuyCourseView.as_view(), name='buy_course'),
     path('course/<slug:slug>/video/', CourseVideoView.as_view(), name='course_video'),
+    path('courses/', CourseListView.as_view(), name='course_list'),
+    path('about/', AboutView.as_view(), name='about'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

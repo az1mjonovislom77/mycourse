@@ -85,12 +85,12 @@
                     {% endif %}
                     <div class="card-body-custom">
                         <div class="info-row">
-                            <span>👥 {{ course.students }} ta o`quvchilar</span>
+                            <span>👥 {{ course.students_count }} ta o`quvchilar</span>
                             <span>Kurs davomiyligi {{ course.duration }}</span>
                         </div>
                         <div class="course-title">{{ course.title }}</div>
                         <div class="bottom-row">
-                            <span class="text-orange">⭐ {{ course.rating }} <small>({{ course.num_reviews }})</small></span>
+                            <span class="text-orange">⭐ {{ course.average_rating|default:"0"|floatformat:1 }}</span>
                             <span>${{ course.price }}</span>
                         </div>
                     </div>

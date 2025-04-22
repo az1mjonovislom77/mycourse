@@ -123,7 +123,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'course/media')
 AUTH_USER_MODEL = 'users.CustomUser'
 
 AUTHENTICATION_BACKENDS = (
-    'users.backends.CustomGithubOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',

@@ -31,7 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+CSRF_TRUSTED_ORIGINS=[
+'https://exam7-production-7485.up.railway.app']
 
 
 INSTALLED_APPS = [
@@ -138,7 +139,7 @@ SOCIAL_AUTH_GITHUB_SECRET = os.getenv("SOCIAL_AUTH_GITHUB_SECRET")
 
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://127.0.0.1:8000/complete/google/"
-SOCIAL_AUTH_GITHUB_REDIRECT_URI = "http://127.0.0.1:8000/complete/github/"
+SOCIAL_AUTH_GITHUB_REDIRECT_URI = "http://127.0.0.1:8000/social-auth/complete/github/"
 
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 

@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'course.apps.CourseConfig',
     'users.apps.UsersConfig',
     'social_django',
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -158,6 +160,15 @@ JAZZMIN_SETTINGS = {
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
     ],
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    )
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

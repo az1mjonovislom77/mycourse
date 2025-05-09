@@ -3,13 +3,20 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import CreateView, TemplateView
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.views import View
+from django.views.generic import CreateView, TemplateView
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
 from users.models import CustomUser
 from .forms import CustomUserCreationForm
+from .serializers import RegisterSerializer, LoginSerializer, VerifyEmailSerializer
+from .permissions import IsAuthenticated, IsActiveUser
+from django.urls import reverse_lazy
 
 User = get_user_model()
 
@@ -30,14 +37,81 @@ def login_page(request):
                 return redirect('users:login_page')
         else:
             messages.error(request, "Email yoki parol noto‘g‘ri!")
-
     return render(request, 'users/login.html')
-
 
 
 def logout_page(request):
     logout(request)
     return redirect("course:index")
+
+
+class RegisterAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+
+            verification_code = user.verification_code
+            mail_subject = 'Your Registration Verification Code'
+            message = f'Hello {user.email},\n\nYour verification code is: {verification_code}'
+
+            email = EmailMessage(
+                mail_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [user.email],
+            )
+            email.send()
+
+            return Response({'message': 'User registered successfully. Check your email for verification.'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data
+            login(request, user)
+
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            return Response({
+                'access': access_token,
+                'refresh': str(refresh)
+            }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VerifyEmailAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = VerifyEmailSerializer(data=request.data)
+        if serializer.is_valid():
+            verification_code = serializer.validated_data['verification_code']
+            try:
+                user = CustomUser.objects.get(verification_code=verification_code)
+                user.is_active = True
+                user.verification_code = ''
+                user.save()
+
+                return Response({'message': 'Email verified successfully!'}, status=status.HTTP_200_OK)
+            except CustomUser.DoesNotExist:
+                return Response({'message': 'Invalid verification code!'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        logout(request)
+        return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
 
 
 class RegisterView(CreateView):

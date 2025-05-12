@@ -4,7 +4,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.db.models import Avg
 from django.contrib.auth.decorators import login_required
-
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView

@@ -37,7 +37,6 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    # Your other URLs here
     path('admin/', admin.site.urls),
     path('course/', include('course.urls', namespace='course')),
     path('users/', include('users.urls', namespace='users')),

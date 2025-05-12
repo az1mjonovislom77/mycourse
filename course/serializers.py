@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Course, Teachers, Category, Lesson, CourseView, Comment, Module
-from django.contrib.auth.models import User
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,9 +47,6 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
-
-
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
